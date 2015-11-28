@@ -33,7 +33,7 @@ public class IntegrityTest
         this.prefixes = prefixes;
     }
     
-    public void report()
+    public boolean report()
     {
         System.err.println("Not in Central Registry:");
         for (MavenKey key : notInCentral)
@@ -50,6 +50,7 @@ public class IntegrityTest
                 System.err.println(attachment);
             }
         }
+        return notInCentral.isEmpty();
     }
     public void check(String groupId, String artifactId, String version) throws UnresolvableModelException
     {
