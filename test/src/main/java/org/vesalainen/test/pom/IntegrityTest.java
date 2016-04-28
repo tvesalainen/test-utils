@@ -92,17 +92,25 @@ public class IntegrityTest
             {
                 for (Dependency dependency : dependencyManagement.getDependencies())
                 {
-                    stack.push(new MavenKey(dependency));
-                    checkDependency(dependency, stack);
-                    stack.pop();
+                    String scope = dependency.getScope();
+                    if (scope == null || "compile".equals(scope))
+                    {
+                        stack.push(new MavenKey(dependency));
+                        checkDependency(dependency, stack);
+                        stack.pop();
+                    }
                 }
             }
         }
         for (Dependency dependency : model.getDependencies())
         {
-            stack.push(new MavenKey(dependency));
-            checkDependency(dependency, stack);
-            stack.pop();
+            String scope = dependency.getScope();
+            if (scope == null || "compile".equals(scope))
+            {
+                stack.push(new MavenKey(dependency));
+                checkDependency(dependency, stack);
+                stack.pop();
+            }
         }
     }
     private void checkDependency(Dependency dependency, Deque<MavenKey> stack)
