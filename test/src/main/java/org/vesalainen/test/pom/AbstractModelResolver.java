@@ -23,11 +23,11 @@ public abstract class AbstractModelResolver implements ModelResolver
     {
     }
 
-    protected String getFilename(String groupId, String artifactId, String version)
+    public String getFilename(String groupId, String artifactId, String version, String pkg)
     {
-        return String.format("%s/%s/%s/%s-%s.pom", groupId.replace('.', '/'), artifactId, version, artifactId, version);
+        return String.format("%s/%s/%s/%s-%s.%s", groupId.replace('.', '/'), artifactId, version, artifactId, version, pkg);
     }
-    protected String getDirectory(String groupId, String artifactId)
+    public String getDirectory(String groupId, String artifactId)
     {
         return String.format("%s/%s", groupId.replace('.', '/'), artifactId);
     }

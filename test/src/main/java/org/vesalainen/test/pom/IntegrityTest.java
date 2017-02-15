@@ -63,25 +63,8 @@ public class IntegrityTest
     {
         MavenKey key = stack.peek();
         Model model = null;
-        try
-        {
-            model = modelFactory.getGlobalModel(key);
-            checkDependencies(model, stack);
-        }
-        catch (ModelBuildingException ex)
-        {
-            try
-            {
-                key.attach(stack);
-                notInCentral.add(key);
-                model = modelFactory.getLocalModel(key);
-                checkDependencies(model, stack);
-            }
-            catch (ModelBuildingException ex1)
-            {
-                throw new IllegalArgumentException(ex1.getMessage()+" "+stack, ex);
-            }
-        }
+        model = modelFactory.getGlobalModel(key);
+        checkDependencies(model, stack);
     }
     private void checkDependencies(Model model, Deque<MavenKey> stack)
     {
@@ -120,25 +103,8 @@ public class IntegrityTest
         {
             checked.add(key);
             Model model = null;
-            try
-            {
-                model = modelFactory.getGlobalModel(dependency);
-                checkDependencies(model, stack);
-            }
-            catch (UnresolvableModelException | ModelBuildingException ex)
-            {
-                try
-                {
-                    key.attach(stack);
-                    notInCentral.add(key);
-                    model = modelFactory.getLocalModel(dependency);
-                    checkDependencies(model, stack);
-                }
-                catch (UnresolvableModelException | ModelBuildingException ex1)
-                {
-                    throw new IllegalArgumentException(ex1.getMessage()+" "+stack, ex);
-                }
-            }
+            model = modelFactory.getGlobalModel(dependency);
+            checkDependencies(model, stack);
         }
     }
     private boolean myPrefix(String groupId)

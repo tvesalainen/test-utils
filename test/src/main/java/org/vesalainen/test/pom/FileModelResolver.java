@@ -22,13 +22,17 @@ import org.apache.maven.model.resolution.UnresolvableModelException;
  */
 public class FileModelResolver extends AbstractModelResolver implements ModelResolver
 {
-    private final String repository;
     private final File base;
 
     public FileModelResolver()
     {
-        repository = System.getProperty("localRepository");
+        String repository = System.getProperty("localRepository");
         base = new File(repository);
+    }
+
+    public FileModelResolver(File repository)
+    {
+        base = repository;
     }
     
     @Override
@@ -77,7 +81,7 @@ public class FileModelResolver extends AbstractModelResolver implements ModelRes
         }
         else
         {
-            String filename = getFilename(groupId, artifactId, version);
+            String filename = getFilename(groupId, artifactId, version, "pom");
             File file = new File(base, filename);
             if (!file.exists())
             {

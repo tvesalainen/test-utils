@@ -6,12 +6,13 @@
 package org.vesalainen.test.pom;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.building.DefaultModelBuilder;
 import org.apache.maven.model.building.DefaultModelBuildingRequest;
 import org.apache.maven.model.building.DefaultModelProcessor;
-import org.apache.maven.model.building.FileModelSource;
 import org.apache.maven.model.building.ModelBuilder;
 import org.apache.maven.model.building.ModelBuildingException;
 import org.apache.maven.model.building.ModelBuildingRequest;
@@ -43,44 +44,96 @@ import org.apache.maven.model.validation.DefaultModelValidator;
  */
 public class ModelFactory
 {
-    private final ModelResolver fileModelResolver = new FileModelResolver();
-    private final ModelResolver urlModelResolver = new UrlModelResolver();
+    private final FileModelResolver fileModelResolver;
+    private final UrlModelResolver urlModelResolver;
+    private final Map<MavenKey,Model> globalMap = new HashMap<>();
+    private final Map<MavenKey,Model> localMap = new HashMap<>();
+
+    public ModelFactory()
+    {
+        this.urlModelResolver = new UrlModelResolver();
+        this.fileModelResolver = new FileModelResolver();
+    }
+
+    public ModelFactory(File localRepository, String url)
+    {
+        this.urlModelResolver = new UrlModelResolver(url);
+        this.fileModelResolver = new FileModelResolver(localRepository);
+    }
+
+    public FileModelResolver getFileModelResolver()
+    {
+        return fileModelResolver;
+    }
+
+    public UrlModelResolver getUrlModelResolver()
+    {
+        return urlModelResolver;
+    }
     
-    public Model getGlobalModel(Dependency dependency) throws UnresolvableModelException, ModelBuildingException
+    public Model getGlobalModel(Dependency dependency)
     {
         return getGlobalModel(dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersion());
     }
-    public Model getLocalModel(Dependency dependency) throws UnresolvableModelException, ModelBuildingException
+    public Model getLocalModel(Dependency dependency)
     {
         return getLocalModel(dependency.getGroupId(), dependency.getArtifactId(), dependency.getVersion());
     }
-    public Model getGlobalModel(MavenKey key) throws UnresolvableModelException, ModelBuildingException
+    public Model getGlobalModel(String groupId, String artifactId, String version)
     {
-        return getGlobalModel(key.getGroupId(), key.getArtifactId(), key.getVersion());
+        return getGlobalModel(new MavenKey(groupId, artifactId, version, "pom"));
     }
-    public Model getLocalModel(MavenKey key) throws UnresolvableModelException, ModelBuildingException
+    public Model getLocalModel(String groupId, String artifactId, String version)
     {
-        return getLocalModel(key.getGroupId(), key.getArtifactId(), key.getVersion());
+        return getLocalModel(new MavenKey(groupId, artifactId, version, "pom"));
     }
-    public Model getGlobalModel(String groupId, String artifactId, String version) throws UnresolvableModelException, ModelBuildingException
+    public Model getGlobalModel(MavenKey key)
     {
-        ModelSource modelSource = urlModelResolver.resolveModel(groupId, artifactId, version);
-        return getGlobalModel(modelSource);
+        Model model = globalMap.get(key);
+        if (model == null)
+        {
+            ModelSource modelSource;
+            try 
+            {
+                modelSource = urlModelResolver.resolveModel(key.getGroupId(), key.getArtifactId(), key.getVersion());
+            }
+            catch (UnresolvableModelException ex) 
+            {
+                throw new RuntimeException(ex);
+            }
+            model = getGlobalModel(modelSource);
+            globalMap.put(key, model);
+        }
+        return model;
     }
-    public Model getLocalModel(String groupId, String artifactId, String version) throws UnresolvableModelException, ModelBuildingException
+    public Model getLocalModel(MavenKey key)
     {
-        FileModelSource fileModelSource = (FileModelSource) fileModelResolver.resolveModel(groupId, artifactId, version);
-        return getLocalModel(fileModelSource);
+        Model model = localMap.get(key);
+        if (model == null)
+        {
+            ModelSource modelSource;
+            try 
+            {
+                modelSource = fileModelResolver.resolveModel(key.getGroupId(), key.getArtifactId(), key.getVersion());
+            }
+            catch (UnresolvableModelException ex) 
+            {
+                throw new RuntimeException(ex);
+            }
+            model = getLocalModel(modelSource);
+            localMap.put(key, model);
+        }
+        return model;
     }
-    public Model getGlobalModel(ModelSource modelSource) throws ModelBuildingException
+    private Model getGlobalModel(ModelSource modelSource)
     {
         return getModel(modelSource, urlModelResolver);
     }
-    public Model getLocalModel(ModelSource modelSource) throws ModelBuildingException
+    private Model getLocalModel(ModelSource modelSource)
     {
         return getModel(modelSource, fileModelResolver);
     }
-    public Model getModel(ModelSource modelSource, ModelResolver modelResolver) throws ModelBuildingException
+    private Model getModel(ModelSource modelSource, ModelResolver modelResolver)
     {
         ModelBuildingRequest req = new DefaultModelBuildingRequest();
         req.setProcessPlugins(false);
@@ -119,6 +172,13 @@ public class ModelFactory
                 .setSuperPomProvider(superPomProvider)
                 .setModelInterpolator(stringSearchModelInterpolator)
                 ;
-        return builder.build(req).getEffectiveModel();
+        try
+        {
+            return builder.build(req).getEffectiveModel();
+        }
+        catch (ModelBuildingException ex)
+        {
+            throw new RuntimeException(ex);
+        }
     }
 }

@@ -7,12 +7,8 @@ package org.vesalainen.test.pom;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.maven.model.Repository;
 import org.apache.maven.model.building.ModelSource;
 import org.apache.maven.model.building.UrlModelSource;
-import org.apache.maven.model.resolution.InvalidRepositoryException;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.model.resolution.UnresolvableModelException;
 
@@ -22,13 +18,24 @@ import org.apache.maven.model.resolution.UnresolvableModelException;
  */
 public class UrlModelResolver extends AbstractModelResolver
 {
-    private String base = "https://search.maven.org/remotecontent?filepath=";
+    private final String base;
+
+    public UrlModelResolver()
+    {
+        this.base = "https://search.maven.org/remotecontent?filepath=";
+    }
+
+    public UrlModelResolver(String base)
+    {
+        this.base = base;
+    }
+    
     @Override
     public ModelSource resolveModel(String groupId, String artifactId, String version) throws UnresolvableModelException
     {
         try
         {
-            String filename = getFilename(groupId, artifactId, version);
+            String filename = getFilename(groupId, artifactId, version, "pom");
             URL url = new URL(base+filename);
             return new UrlModelSource(url);
         }
