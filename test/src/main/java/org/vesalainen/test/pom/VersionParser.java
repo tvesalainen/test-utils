@@ -5,14 +5,13 @@
  */
 package org.vesalainen.test.pom;
 
+import java.util.function.Predicate;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
-import org.vesalainen.parser.annotation.ParserContext;
 import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Terminal;
-import org.vesalainen.regex.Regex;
 
 /**
  *
@@ -27,9 +26,74 @@ public abstract class VersionParser
         return (VersionParser) GenClassFactory.loadGenInstance(VersionParser.class);
     }
 
+    @ParseMethod(start="versionRange")
+    public abstract VersionRange parseVersionRange(String text);
+
     @ParseMethod(start="version")
     public abstract Version parseVersion(String text);
 
+    @Rule("rangeII")
+    @Rule("rangeIE")
+    @Rule("rangeEI")
+    @Rule("rangeEE")
+    @Rule("rangeIL")
+    @Rule("rangeEL")
+    @Rule("rangeIU")
+    @Rule("rangeEU")
+    @Rule("rangeOnly")
+    @Rule("rangeAny")
+    protected abstract VersionRange versionRange(VersionRange versionRange);
+            
+    @Rule("'\\[' version '\\,' version '\\]'")
+    protected VersionRange rangeII(Version v1, Version v2)
+    {
+        return new VersionRange((v)->v.compareTo(v1)>=0 && v.compareTo(v2)<=0, "["+v1+","+v2+"]");
+    }
+    @Rule("'\\[' version '\\,' version '\\)'")
+    protected VersionRange rangeIE(Version v1, Version v2)
+    {
+        return new VersionRange((v)->v.compareTo(v1)>=0 && v.compareTo(v2)<0, "["+v1+","+v2+")");
+    }
+    @Rule("'\\(' version '\\,' version '\\]'")
+    protected VersionRange rangeEI(Version v1, Version v2)
+    {
+        return new VersionRange((v)->v.compareTo(v1)>0 && v.compareTo(v2)<=0, "("+v1+","+v2+"]");
+    }
+    @Rule("'\\(' version '\\,' version '\\)'")
+    protected VersionRange rangeEE(Version v1, Version v2)
+    {
+        return new VersionRange((v)->v.compareTo(v1)>0 && v.compareTo(v2)<0, "("+v1+","+v2+")");
+    }
+    @Rule("'\\[' version '\\,[\\)\\]]'")
+    protected VersionRange rangeIL(Version v1)
+    {
+        return new VersionRange((v)->v.compareTo(v1)>=0, "["+v1+",]");
+    }
+    @Rule("'\\(' version '\\,[\\)\\]]'")
+    protected VersionRange rangeEL(Version v1)
+    {
+        return new VersionRange((v)->v.compareTo(v1)>0, "("+v1+",]");
+    }
+    @Rule("'[\\[\\(]\\,' version '\\]'")
+    protected VersionRange rangeIU(Version v1)
+    {
+        return new VersionRange((v)->v.compareTo(v1)<=0, "[,"+v1+"]");
+    }
+    @Rule("'[\\[\\(]\\,' version '\\)'")
+    protected VersionRange rangeEU(Version v1)
+    {
+        return new VersionRange((v)->v.compareTo(v1)<0, "[,"+v1+")");
+    }
+    @Rule("'\\[' version '\\]'")
+    protected VersionRange rangeOnly(Version v1)
+    {
+        return new VersionRange((v)->v.compareTo(v1)==0, "["+v1+"]");
+    }
+    @Rule("version")
+    protected VersionRange rangeAny(Version v1)
+    {
+        return new VersionRange((v)->true, v1.toString(), v1);
+    }
     @Rule("integer '\\.' integer '\\.' integer '\\-' string")
     protected Version version(int major, int minor, int incremental, String qualifier)
     {

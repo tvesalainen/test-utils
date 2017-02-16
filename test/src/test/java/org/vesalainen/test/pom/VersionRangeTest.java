@@ -22,7 +22,8 @@ public class VersionRangeTest
     @Test
     public void testInclusive1()
     {
-        VersionRange vr = new VersionRange("[1.0,3.0]");
+        VersionParser vp = VersionParser.getInstance();
+        VersionRange vr = vp.parseVersionRange("[1.0,3.0]");
         assertFalse(vr.in("0.9"));
         assertTrue(vr.in("1.0"));
         assertTrue(vr.in("1.1"));
@@ -33,7 +34,8 @@ public class VersionRangeTest
     @Test
     public void testInclusive2()
     {
-        VersionRange vr = new VersionRange("[1.0,]");
+        VersionParser vp = VersionParser.getInstance();
+        VersionRange vr = vp.parseVersionRange("[1.0,]");
         assertFalse(vr.in("0.9"));
         assertTrue(vr.in("1.0"));
         assertTrue(vr.in("1.1"));
@@ -44,7 +46,8 @@ public class VersionRangeTest
     @Test
     public void testInclusive3()
     {
-        VersionRange vr = new VersionRange("[,3.0]");
+        VersionParser vp = VersionParser.getInstance();
+        VersionRange vr = vp.parseVersionRange("[,3.0]");
         assertTrue(vr.in("0.9"));
         assertTrue(vr.in("1.0"));
         assertTrue(vr.in("1.1"));
@@ -55,7 +58,8 @@ public class VersionRangeTest
     @Test
     public void testInclusive4()
     {
-        VersionRange vr = new VersionRange("[3.0]");
+        VersionParser vp = VersionParser.getInstance();
+        VersionRange vr = vp.parseVersionRange("[3.0]");
         assertFalse(vr.in("0.9"));
         assertFalse(vr.in("1.0"));
         assertFalse(vr.in("1.1"));
@@ -66,7 +70,8 @@ public class VersionRangeTest
     @Test
     public void testExclusive1()
     {
-        VersionRange vr = new VersionRange("(1.0,3.0)");
+        VersionParser vp = VersionParser.getInstance();
+        VersionRange vr = vp.parseVersionRange("(1.0,3.0)");
         assertFalse(vr.in("0.9"));
         assertFalse(vr.in("1.0"));
         assertTrue(vr.in("1.1"));
@@ -77,7 +82,8 @@ public class VersionRangeTest
     @Test
     public void testExclusive2()
     {
-        VersionRange vr = new VersionRange("(1.0,)");
+        VersionParser vp = VersionParser.getInstance();
+        VersionRange vr = vp.parseVersionRange("(1.0,)");
         assertFalse(vr.in("0.9"));
         assertFalse(vr.in("1.0"));
         assertTrue(vr.in("1.1"));
@@ -88,7 +94,8 @@ public class VersionRangeTest
     @Test
     public void testExclusive3()
     {
-        VersionRange vr = new VersionRange("(,3.0)");
+        VersionParser vp = VersionParser.getInstance();
+        VersionRange vr = vp.parseVersionRange("(,3.0)");
         assertTrue(vr.in("0.9"));
         assertTrue(vr.in("1.0"));
         assertTrue(vr.in("1.1"));
