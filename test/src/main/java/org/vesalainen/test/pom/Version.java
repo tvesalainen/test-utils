@@ -149,6 +149,14 @@ public class Version implements Comparable<Version>
                     }
                     else
                     {
+                        if (qualifier == null)
+                        {
+                            return -1;
+                        }
+                        if (o.qualifier == null)
+                        {
+                            return 1;
+                        }
                         return qualifier.compareTo(o.qualifier);
                     }
                 }
@@ -166,6 +174,30 @@ public class Version implements Comparable<Version>
         {
             return major - o.major;
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(major);
+        if (minor != -1)
+        {
+            sb.append('.').append(minor);
+        }
+        if (incremental != -1)
+        {
+            sb.append('.').append(incremental);
+        }
+        if (qualifier != null)
+        {
+            sb.append('-').append(qualifier);
+        }
+        if (buildNumber != -1)
+        {
+            sb.append('-').append(buildNumber);
+        }
+        return sb.toString();
     }
     
 }

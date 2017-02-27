@@ -21,6 +21,8 @@ import org.vesalainen.parser.annotation.Terminal;
 @GrammarDef()
 public abstract class VersionParser
 {
+    public static VersionParser VERSION_PARSER = getInstance();
+    
     public static VersionParser getInstance()
     {
         return (VersionParser) GenClassFactory.loadGenInstance(VersionParser.class);
@@ -67,22 +69,22 @@ public abstract class VersionParser
     @Rule("'\\[' version '\\,[\\)\\]]'")
     protected VersionRange rangeIL(Version v1)
     {
-        return new VersionRange((v)->v.compareTo(v1)>=0, "["+v1+",]");
+        return new VersionRange((v)->v.compareTo(v1)>=0, "["+v1+",)");
     }
     @Rule("'\\(' version '\\,[\\)\\]]'")
     protected VersionRange rangeEL(Version v1)
     {
-        return new VersionRange((v)->v.compareTo(v1)>0, "("+v1+",]");
+        return new VersionRange((v)->v.compareTo(v1)>0, "("+v1+",)");
     }
     @Rule("'[\\[\\(]\\,' version '\\]'")
     protected VersionRange rangeIU(Version v1)
     {
-        return new VersionRange((v)->v.compareTo(v1)<=0, "[,"+v1+"]");
+        return new VersionRange((v)->v.compareTo(v1)<=0, "(,"+v1+"]");
     }
     @Rule("'[\\[\\(]\\,' version '\\)'")
     protected VersionRange rangeEU(Version v1)
     {
-        return new VersionRange((v)->v.compareTo(v1)<0, "[,"+v1+")");
+        return new VersionRange((v)->v.compareTo(v1)<0, "(,"+v1+")");
     }
     @Rule("'\\[' version '\\]'")
     protected VersionRange rangeOnly(Version v1)

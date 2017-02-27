@@ -51,4 +51,21 @@ public class VersionRange
     {
         return predicate.test(version);
     }
+
+    public Predicate<Version> getPredicate()
+    {
+        return predicate;
+    }
+
+    public Version getPreferred()
+    {
+        return preferred;
+    }
+
+    @Override
+    public String toString()
+    {
+        return toString;
+    }
+    
 }

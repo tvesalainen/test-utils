@@ -8,7 +8,6 @@ package org.vesalainen.test.pom;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.apache.maven.model.building.FileModelSource;
@@ -37,7 +36,7 @@ public class FileModelResolver extends AbstractModelResolver implements ModelRes
     
     @Override
     public ModelSource resolveModel(String groupId, String artifactId, String version) throws UnresolvableModelException
-    {
+    {/*
         if (VersionRange.isVersionRange(version))
         {
             VersionRange range = new VersionRange(version);
@@ -79,7 +78,7 @@ public class FileModelResolver extends AbstractModelResolver implements ModelRes
             }
             throw new IllegalArgumentException("no suitable version for "+version);
         }
-        else
+        else*/
         {
             String filename = getFilename(groupId, artifactId, version, "pom");
             File file = new File(base, filename);
@@ -102,4 +101,39 @@ public class FileModelResolver extends AbstractModelResolver implements ModelRes
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    public List<Version> getVersions(String groupId, String artifactId)
+    {
+        String directoryName = getDirectory(groupId, artifactId);
+        File dir = new File(base, directoryName);
+        FileFilter filter = new FileFilter() 
+        {
+
+            @Override
+            public boolean accept(File pathname)
+            {
+                if (pathname.isDirectory())
+                {
+                    switch (pathname.getName())
+                    {
+                        case ".":
+                        case "..":
+                            return false;
+                        default:
+                            return true;
+                    }
+                }
+                return false;
+            }
+        };
+        List<Version> versions = new ArrayList<>();
+        if (dir.isDirectory())
+        {
+            for (File file : dir.listFiles(filter))
+            {
+                versions.add(VersionParser.VERSION_PARSER.parseVersion(file.getName()));
+            }
+        }
+        Collections.sort(versions);
+        return versions;
+    }
 }

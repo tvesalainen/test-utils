@@ -79,4 +79,22 @@ public class VersionTest
         assertEquals(v1, v2);
     }
     
+    @Test
+    public void test7()
+    {
+        VersionParser vp = VersionParser.getInstance();
+        Version v1 = vp.parseVersion("1.2.3");
+        Version v2 = vp.parseVersion("1.2.3-beta-01");
+        assertTrue(v1.compareTo(v2) < 0);
+    }
+    
+    @Test
+    public void test8()
+    {
+        VersionParser vp = VersionParser.getInstance();
+        Version v1 = vp.parseVersion("1.2.3-beta-1");
+        Version v2 = vp.parseVersion("1.2.3");
+        assertTrue(v1.compareTo(v2) > 0);
+    }
+    
 }

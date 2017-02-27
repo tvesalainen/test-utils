@@ -29,6 +29,7 @@ public class VersionRangeTest
         assertTrue(vr.in("1.1"));
         assertTrue(vr.in("3.0"));
         assertFalse(vr.in("3.1"));
+        assertEquals("[1.0,3.0]", vr.toString());
     }
     
     @Test
@@ -41,6 +42,7 @@ public class VersionRangeTest
         assertTrue(vr.in("1.1"));
         assertTrue(vr.in("3.0"));
         assertTrue(vr.in("3.1"));
+        assertEquals("[1.0,)", vr.toString());
     }
     
     @Test
@@ -53,6 +55,7 @@ public class VersionRangeTest
         assertTrue(vr.in("1.1"));
         assertTrue(vr.in("3.0"));
         assertFalse(vr.in("3.1"));
+        assertEquals("(,3.0]", vr.toString());
     }
     
     @Test
@@ -65,6 +68,7 @@ public class VersionRangeTest
         assertFalse(vr.in("1.1"));
         assertTrue(vr.in("3.0"));
         assertFalse(vr.in("3.1"));
+        assertEquals("[3.0]", vr.toString());
     }
     
     @Test
@@ -77,6 +81,7 @@ public class VersionRangeTest
         assertTrue(vr.in("1.1"));
         assertFalse(vr.in("3.0"));
         assertFalse(vr.in("3.1"));
+        assertEquals("(1.0,3.0)", vr.toString());
     }
     
     @Test
@@ -89,6 +94,7 @@ public class VersionRangeTest
         assertTrue(vr.in("1.1"));
         assertTrue(vr.in("3.0"));
         assertTrue(vr.in("3.1"));
+        assertEquals("(1.0,)", vr.toString());
     }
     
     @Test
@@ -101,6 +107,7 @@ public class VersionRangeTest
         assertTrue(vr.in("1.1"));
         assertFalse(vr.in("3.0"));
         assertFalse(vr.in("3.1"));
+        assertEquals("(,3.0)", vr.toString());
     }
     
 }

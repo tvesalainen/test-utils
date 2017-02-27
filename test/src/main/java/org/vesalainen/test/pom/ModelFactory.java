@@ -48,6 +48,7 @@ public class ModelFactory
     private final UrlModelResolver urlModelResolver;
     private final Map<MavenKey,Model> globalMap = new HashMap<>();
     private final Map<MavenKey,Model> localMap = new HashMap<>();
+    private final Map<ArtifactKey,VersionResolver> modelVersionMap = new HashMap<>();
 
     public ModelFactory()
     {
@@ -69,6 +70,20 @@ public class ModelFactory
     public UrlModelResolver getUrlModelResolver()
     {
         return urlModelResolver;
+    }
+    
+    public VersionResolver getVersionResolver(Dependency dependency)
+    {
+        VersionRange versionRange = VersionParser.VERSION_PARSER.parseVersionRange(dependency.getVersion());
+        ArtifactKey key = new ArtifactKey(dependency);
+        VersionResolver versionResolver = modelVersionMap.get(key);
+        if (versionResolver == null)
+        {
+            versionResolver = new VersionResolver(key, versionRange, fileModelResolver.getVersions(dependency.getGroupId(), dependency.getArtifactId()));
+            modelVersionMap.put(key, versionResolver);
+        }
+        versionResolver.addRange(versionRange);
+        return versionResolver;
     }
     
     public Model getGlobalModel(Dependency dependency)
