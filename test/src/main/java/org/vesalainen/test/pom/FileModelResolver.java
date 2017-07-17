@@ -14,6 +14,7 @@ import org.apache.maven.model.building.FileModelSource;
 import org.apache.maven.model.building.ModelSource;
 import org.apache.maven.model.resolution.ModelResolver;
 import org.apache.maven.model.resolution.UnresolvableModelException;
+import org.vesalainen.regex.SyntaxErrorException;
 
 /**
  *
@@ -130,7 +131,14 @@ public class FileModelResolver extends AbstractModelResolver implements ModelRes
         {
             for (File file : dir.listFiles(filter))
             {
-                versions.add(VersionParser.VERSION_PARSER.parseVersion(file.getName()));
+                try
+                {
+                    versions.add(VersionParser.VERSION_PARSER.parseVersion(file.getName()));
+                }
+                catch (SyntaxErrorException ex)
+                {
+                    
+                }
             }
         }
         Collections.sort(versions);
