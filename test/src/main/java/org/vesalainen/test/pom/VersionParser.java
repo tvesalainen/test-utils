@@ -15,7 +15,7 @@ import org.vesalainen.parser.annotation.Terminal;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 @GenClassname("org.vesalainen.test.pom.VersionParserImpl")
 @GrammarDef()

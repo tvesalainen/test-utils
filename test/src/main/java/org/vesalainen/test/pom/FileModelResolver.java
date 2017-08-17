@@ -18,7 +18,7 @@ import org.vesalainen.regex.SyntaxErrorException;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class FileModelResolver extends AbstractModelResolver implements ModelResolver
 {

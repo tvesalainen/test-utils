@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class Version implements Comparable<Version>
 {

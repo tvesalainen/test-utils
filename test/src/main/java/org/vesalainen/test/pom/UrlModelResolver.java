@@ -14,7 +14,7 @@ import org.apache.maven.model.resolution.UnresolvableModelException;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class UrlModelResolver extends AbstractModelResolver
 {

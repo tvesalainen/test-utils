@@ -15,7 +15,7 @@ import org.apache.maven.model.Model;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class MavenKey implements Comparable<MavenKey>
 {

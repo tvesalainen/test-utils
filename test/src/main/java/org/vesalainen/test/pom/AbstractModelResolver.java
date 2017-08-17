@@ -13,7 +13,7 @@ import org.apache.maven.model.resolution.ModelResolver;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public abstract class AbstractModelResolver implements ModelResolver
 {

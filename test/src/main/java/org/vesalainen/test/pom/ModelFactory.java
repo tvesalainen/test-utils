@@ -40,7 +40,7 @@ import org.apache.maven.model.validation.DefaultModelValidator;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
 public class ModelFactory
 {
