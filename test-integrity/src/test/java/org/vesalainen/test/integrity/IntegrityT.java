@@ -15,9 +15,9 @@ import org.vesalainen.test.pom.IntegrityTest;
 
 /**
  *
- * @author tkv
+ * @author Timo Vesalainen <timo.vesalainen@iki.fi>
  */
-public class TestIntegrity
+public class IntegrityT
 {
     
     @Test
@@ -26,14 +26,14 @@ public class TestIntegrity
         try
         {
             IntegrityTest test = new IntegrityTest("org.vesalainen", "fi.hoski");
-            test.check("org.vesalainen", "parent", "1.0.8");
-            test.check("fi.hoski", "parent", "1.0.6");
+            test.check("org.vesalainen.nmea", "router", "1.8.0");
+            //test.check("fi.hoski", "parent", "1.0.7");
             assertTrue(test.report());
         }
         catch (UnresolvableModelException ex)
         {
             fail(ex.getMessage());
-            Logger.getLogger(TestIntegrity.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(IntegrityT.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
