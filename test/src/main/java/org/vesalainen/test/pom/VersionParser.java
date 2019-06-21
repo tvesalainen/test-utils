@@ -5,7 +5,6 @@
  */
 package org.vesalainen.test.pom;
 
-import java.util.function.Predicate;
 import org.vesalainen.parser.GenClassFactory;
 import org.vesalainen.parser.annotation.GenClassname;
 import org.vesalainen.parser.annotation.GrammarDef;
