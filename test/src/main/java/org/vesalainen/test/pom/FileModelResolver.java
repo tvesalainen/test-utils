@@ -99,7 +99,7 @@ public class FileModelResolver extends AbstractModelResolver implements ModelRes
     @Override
     public ModelResolver newCopy()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new FileModelResolver();
     }
     
     public List<Version> getVersions(String groupId, String artifactId)
