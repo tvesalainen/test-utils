@@ -25,8 +25,8 @@ public class IntegrityT
     {
         try
         {
-            IntegrityTest test = new IntegrityTest("org.vesalainen", "fi.hoski");
-            test.check("org.vesalainen.nmea", "router", "1.8.0");
+            IntegrityTest test = new IntegrityTest("org.vesalainen");
+            test.check("org.vesalainen.nmea", "router", "1.8.1");
             //test.check("fi.hoski", "parent", "1.0.7");
             assertTrue(test.report());
         }
