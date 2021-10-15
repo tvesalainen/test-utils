@@ -58,54 +58,68 @@ public abstract class VersionParser
     @Rule("rangeAny")
     protected abstract VersionRange versionRange(VersionRange versionRange);
             
-    @Rule("'\\[' version '\\,' version '\\]'")
-    protected VersionRange rangeII(Version v1, Version v2)
+    @Rule("'\\[' ver '\\,' ver '\\]'")
+    protected VersionRange rangeII(String s1, String s2)
     {
+        Version v1 = parseVersion(s1);
+        Version v2 = parseVersion(s2);
         return new VersionRange((v)->v.compareTo(v1)>=0 && v.compareTo(v2)<=0, "["+v1+","+v2+"]");
     }
-    @Rule("'\\[' version '\\,' version '\\)'")
-    protected VersionRange rangeIE(Version v1, Version v2)
+    @Rule("'\\[' ver '\\,' ver '\\)'")
+    protected VersionRange rangeIE(String s1, String s2)
     {
+        Version v1 = parseVersion(s1);
+        Version v2 = parseVersion(s2);
         return new VersionRange((v)->v.compareTo(v1)>=0 && v.compareTo(v2)<0, "["+v1+","+v2+")");
     }
-    @Rule("'\\(' version '\\,' version '\\]'")
-    protected VersionRange rangeEI(Version v1, Version v2)
+    @Rule("'\\(' ver '\\,' ver '\\]'")
+    protected VersionRange rangeEI(String s1, String s2)
     {
+        Version v1 = parseVersion(s1);
+        Version v2 = parseVersion(s2);
         return new VersionRange((v)->v.compareTo(v1)>0 && v.compareTo(v2)<=0, "("+v1+","+v2+"]");
     }
-    @Rule("'\\(' version '\\,' version '\\)'")
-    protected VersionRange rangeEE(Version v1, Version v2)
+    @Rule("'\\(' ver '\\,' ver '\\)'")
+    protected VersionRange rangeEE(String s1, String s2)
     {
+        Version v1 = parseVersion(s1);
+        Version v2 = parseVersion(s2);
         return new VersionRange((v)->v.compareTo(v1)>0 && v.compareTo(v2)<0, "("+v1+","+v2+")");
     }
-    @Rule("'\\[' version '\\,[\\)\\]]'")
-    protected VersionRange rangeIL(Version v1)
+    @Rule("'\\[' ver '\\,[\\)\\]]'")
+    protected VersionRange rangeIL(String s1)
     {
+        Version v1 = parseVersion(s1);
         return new VersionRange((v)->v.compareTo(v1)>=0, "["+v1+",)");
     }
-    @Rule("'\\(' version '\\,[\\)\\]]'")
-    protected VersionRange rangeEL(Version v1)
+    @Rule("'\\(' ver '\\,[\\)\\]]'")
+    protected VersionRange rangeEL(String s1)
     {
+        Version v1 = parseVersion(s1);
         return new VersionRange((v)->v.compareTo(v1)>0, "("+v1+",)");
     }
-    @Rule("'[\\[\\(]\\,' version '\\]'")
-    protected VersionRange rangeIU(Version v1)
+    @Rule("'[\\[\\(]\\,' ver '\\]'")
+    protected VersionRange rangeIU(String s1)
     {
+        Version v1 = parseVersion(s1);
         return new VersionRange((v)->v.compareTo(v1)<=0, "(,"+v1+"]");
     }
-    @Rule("'[\\[\\(]\\,' version '\\)'")
-    protected VersionRange rangeEU(Version v1)
+    @Rule("'[\\[\\(]\\,' ver '\\)'")
+    protected VersionRange rangeEU(String s1)
     {
+        Version v1 = parseVersion(s1);
         return new VersionRange((v)->v.compareTo(v1)<0, "(,"+v1+")");
     }
-    @Rule("'\\[' version '\\]'")
-    protected VersionRange rangeOnly(Version v1)
+    @Rule("'\\[' ver '\\]'")
+    protected VersionRange rangeOnly(String s1)
     {
+        Version v1 = parseVersion(s1);
         return new VersionRange((v)->v.compareTo(v1)==0, "["+v1+"]");
     }
-    @Rule("version")
-    protected VersionRange rangeAny(Version v1)
+    @Rule("ver")
+    protected VersionRange rangeAny(String s1)
     {
+        Version v1 = parseVersion(s1);
         return new VersionRange((v)->true, v1.toString(), v1);
     }
     @Rule("integer '\\.' integer '\\.' integer '\\-' string")
@@ -170,5 +184,8 @@ public abstract class VersionParser
     
     @Terminal(expression="[0-9a-zA-z\\-]+")
     protected abstract String string(String s);
+    
+    @Terminal(expression="[^\\[\\]\\(\\)\\,]+")
+    protected abstract String ver(String s);
     
 }

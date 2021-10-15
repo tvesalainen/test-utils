@@ -34,5 +34,11 @@ public class StringVersion implements Version
     {
         return version.compareTo(o.toString());
     }
+
+    @Override
+    public String toString()
+    {
+        return version;
+    }
     
 }
