@@ -11,6 +11,7 @@ import org.vesalainen.parser.annotation.GrammarDef;
 import org.vesalainen.parser.annotation.ParseMethod;
 import org.vesalainen.parser.annotation.Rule;
 import org.vesalainen.parser.annotation.Terminal;
+import org.vesalainen.regex.SyntaxErrorException;
 
 /**
  *
@@ -27,11 +28,23 @@ public abstract class VersionParser
         return (VersionParser) GenClassFactory.loadGenInstance(VersionParser.class);
     }
 
+    public Version parseVersion(String text)
+    {
+        try
+        {
+            return parseSimpleVersion(text);
+        }
+        catch (SyntaxErrorException ex)
+        {
+            return new StringVersion(text);
+        }
+    }
+    
     @ParseMethod(start="versionRange")
     public abstract VersionRange parseVersionRange(String text);
 
     @ParseMethod(start="version")
-    public abstract Version parseVersion(String text);
+    protected abstract Version parseSimpleVersion(String text);
 
     @Rule("rangeII")
     @Rule("rangeIE")
@@ -98,7 +111,7 @@ public abstract class VersionParser
     @Rule("integer '\\.' integer '\\.' integer '\\-' string")
     protected Version version(int major, int minor, int incremental, String qualifier)
     {
-        Version version = new Version()
+        Version version = new SimpleVersion()
                 .setMajor(major)
                 .setMinor(minor)
                 .setIncremental(incremental)
@@ -109,7 +122,7 @@ public abstract class VersionParser
     @Rule("integer '\\.' integer '\\-' string")
     protected Version version(int major, int minor, String qualifier)
     {
-        Version version = new Version()
+        Version version = new SimpleVersion()
                 .setMajor(major)
                 .setMinor(minor)
                 .setQualifier(qualifier);
@@ -119,7 +132,7 @@ public abstract class VersionParser
     @Rule("integer '\\-' string")
     protected Version version(int major, String qualifier)
     {
-        Version version = new Version()
+        Version version = new SimpleVersion()
                 .setMajor(major)
                 .setQualifier(qualifier);
         return version;
@@ -128,7 +141,7 @@ public abstract class VersionParser
     @Rule("integer '\\.' integer '\\.' integer")
     protected Version version(int major, int minor, int incremental)
     {
-        Version version = new Version()
+        Version version = new SimpleVersion()
                 .setMajor(major)
                 .setMinor(minor)
                 .setIncremental(incremental);
@@ -138,7 +151,7 @@ public abstract class VersionParser
     @Rule("integer '\\.' integer")
     protected Version version(int major, int minor)
     {
-        Version version = new Version()
+        Version version = new SimpleVersion()
                 .setMajor(major)
                 .setMinor(minor);
         return version;
@@ -147,7 +160,7 @@ public abstract class VersionParser
     @Rule("integer")
     protected Version version(int major)
     {
-        Version version = new Version()
+        Version version = new SimpleVersion()
                 .setMajor(major);
         return version;
     }

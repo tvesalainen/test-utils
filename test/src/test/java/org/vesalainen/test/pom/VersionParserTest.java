@@ -24,7 +24,7 @@ public class VersionParserTest
     {
         VersionParser vp = VersionParser.getInstance();
         assertNotNull(vp);
-        Version v1 = vp.parseVersion("1.2.3");
+        SimpleVersion v1 = (SimpleVersion) vp.parseVersion("1.2.3");
         assertEquals(1, v1.getMajor());
         assertEquals(2, v1.getMinor());
         assertEquals(3, v1.getIncremental());
@@ -35,7 +35,7 @@ public class VersionParserTest
     {
         VersionParser vp = VersionParser.getInstance();
         assertNotNull(vp);
-        Version v1 = vp.parseVersion("1.2.3-20170215-1527-1");
+        SimpleVersion v1 = (SimpleVersion) vp.parseVersion("1.2.3-20170215-1527-1");
         assertEquals(1, v1.getMajor());
         assertEquals(2, v1.getMinor());
         assertEquals(3, v1.getIncremental());
@@ -48,7 +48,7 @@ public class VersionParserTest
     {
         VersionParser vp = VersionParser.getInstance();
         assertNotNull(vp);
-        Version v1 = vp.parseVersion("1.2-20170215-1527-1");
+        SimpleVersion v1 = (SimpleVersion) vp.parseVersion("1.2-20170215-1527-1");
         assertEquals(1, v1.getMajor());
         assertEquals(2, v1.getMinor());
         assertEquals(-1, v1.getIncremental());
@@ -61,7 +61,7 @@ public class VersionParserTest
     {
         VersionParser vp = VersionParser.getInstance();
         assertNotNull(vp);
-        Version v1 = vp.parseVersion("1-20170215-1527-1");
+        SimpleVersion v1 = (SimpleVersion) vp.parseVersion("1-20170215-1527-1");
         assertEquals(1, v1.getMajor());
         assertEquals(-1, v1.getMinor());
         assertEquals(-1, v1.getIncremental());
@@ -74,7 +74,7 @@ public class VersionParserTest
     {
         VersionParser vp = VersionParser.getInstance();
         assertNotNull(vp);
-        Version v1 = vp.parseVersion("1-201702151527");
+        SimpleVersion v1 = (SimpleVersion) vp.parseVersion("1-201702151527");
         assertEquals(1, v1.getMajor());
         assertEquals(-1, v1.getMinor());
         assertEquals(-1, v1.getIncremental());
